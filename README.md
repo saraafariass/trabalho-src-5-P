@@ -4,35 +4,100 @@
 
 <br>
 
-<h3>
-  Sobre o Repositório
-</h3>
-<hr>
-<p>
-  O presente repositório tem por principal objetivo conter toda a documentação oficial do trabalho final da disciplina de Serviços de Redes de Computadores, oferecida pelo Instituto Federal Goiano - Campus Ceres durante o 5º período do curso de Sistemas de Informação, visando a apresentação e documentação como formas de obtenção de nota para aprovação na disciplina citada anteriormente.
-</p>
 
-<br>
+# **📦 Dockerized Network Services Setup**  
 
-<h3>
-  Professor Orientador
-</h3>
-<hr>
-<div>
-  <h5>Roitier Campos Gonçalves</h5>
-  <p>
-    Email: roitier.goncalves@ifgoiano.edu.br
-    <br>
-    Github: https://github.com/Roitier
-  </p>
-</div>
+**🚀 Um ambiente Docker completo com DNS (Bind9), DHCP (isc-dhcp-server), Samba, FTP (vsftpd), LDAP, Firewall (iptables) e NGINX, pronto para ser replicado em qualquer máquina.**  
 
-<br>
+---
 
-<h3>
-  Alunos
-</h3>
-<hr>
+## **📌 Visão Geral**  
+Este projeto automatiza a implantação de um **servidor de rede completo** dentro de um container Docker, incluindo:  
+- **DNS** (Bind9) para resolução de nomes.  
+- **DHCP** (isc-dhcp-server) para distribuição automática de IPs.  
+- **Samba** para compartilhamento de arquivos.  
+- **FTP** (vsftpd) para transferência de arquivos.  
+- **LDAP** para autenticação centralizada.  
+- **Firewall** (iptables) para segurança básica.  
+- **NGINX** para hospedagem web.  
+
+Tudo isso é **empacotado em uma imagem Docker personalizada**, facilitando a execução em qualquer máquina com apenas **um comando**.  
+
+---
+
+## **⚙️ Pré-requisitos**  
+- **Docker** instalado ([Guia de instalação](https://docs.docker.com/engine/install/))  
+- **Docker Compose** (geralmente incluso na instalação do Docker)  
+- **Linux** (recomendado) ou WSL2 no Windows  
+
+---
+
+## **🛠️ Como Usar**  
+
+### **1️⃣ Clone o repositório (ou copie os arquivos necessários)**  
+```bash
+git clone https://github.com/seu-usuario/docker-network-services.git
+cd docker-network-services
+```
+
+### **2️⃣ Construa a imagem Docker**  
+```bash
+docker-compose build
+```
+
+### **3️⃣ Inicie o container**  
+```bash
+docker-compose up -d
+```
+
+### **4️⃣ Acesse o container**  
+```bash
+docker exec -it debian-rede bash
+```
+
+---
+
+## **📂 Estrutura do Projeto**  
+```
+.
+├── Dockerfile            # Configuração da imagem Docker
+├── docker-compose.yml    # Definição do container e rede
+├── configs/             # (Opcional) Pasta para configurações personalizadas
+│   ├── dhcpd.conf       # Configuração do DHCP
+│   ├── named.conf.local # Configuração do DNS (Bind9)
+│   └── smb.conf         # Configuração do Samba
+└── README.md            # Este arquivo
+```
+
+---
+
+## **🔧 Configurações Personalizáveis**  
+Antes de construir a imagem, você pode editar:  
+- **`Dockerfile`** → Adicione/remova pacotes conforme necessário.  
+- **`docker-compose.yml`** → Ajuste a subnet (`192.168.1.0/24`) ou volumes.  
+- **Arquivos em `configs/`** → Defina configurações específicas para DHCP, DNS, Samba, etc.  
+
+---
+
+## **💡 Exemplo de Uso**  
+### **▶️ Iniciar todos os serviços**  
+```bash
+docker exec -it debian-rede bash
+service isc-dhcp-server start
+service bind9 start
+service smbd start
+service vsftpd start
+service nginx start
+```
+
+### **🔄 Reiniciar o container**  
+```bash
+docker-compose down && docker-compose up -d
+```
+
+---
+
+## **📌 Colaboradores**  
 <div>
   <h5>Paulo Martins Alves do Prado</h5>
   <p>
@@ -51,12 +116,17 @@
   </p>
 </div>
 
-<br>
+## **📌 Professor Orientador** 
+<div>
+  <h5>Roitier Campos Gonçalves</h5>
+  <p>
+    Email: roitier.goncalves@ifgoiano.edu.br
+    <br>
+    Github: https://github.com/Roitier
+  </p>
+</div>
 
-<h3>
-  Preparando o Terreno
-</h3>
-<hr>
-<h3>
-  1. Instalação
-</h3>
+---
+
+### **🎯 Objetivo**  
+O presente repositório tem por principal objetivo conter toda a documentação oficial do trabalho final da disciplina de Serviços de Redes de Computadores, oferecida pelo Instituto Federal Goiano - Campus Ceres durante o 5º período do curso de Sistemas de Informação, visando a apresentação e documentação como formas de obtenção de nota para aprovação na disciplina citada anteriormente.
