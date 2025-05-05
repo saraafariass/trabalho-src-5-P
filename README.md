@@ -19,7 +19,7 @@ Este projeto automatiza a implantação de um **servidor de rede completo** dent
 - **FTP** (vsftpd) para transferência de arquivos.  
 - **LDAP** para autenticação centralizada.  
 - **Firewall** (iptables) para segurança básica.  
-- **NGINX** para hospedagem web.  
+- **Apache** para hospedagem web.  
 
 Tudo isso é **empacotado em uma imagem Docker personalizada**, facilitando a execução em qualquer máquina com apenas **um comando**.  
 
