@@ -79,20 +79,27 @@ Antes de construir a imagem, você pode editar:
 
 ---
 
-## **💡 Exemplo de Uso**  
-### **▶️ Iniciar todos os serviços**  
-```bash
-docker exec -it debian-rede bash
-service isc-dhcp-server start
-service bind9 start
-service smbd start
-service vsftpd start
-service nginx start
-```
+## **Iniciando**  
 
-### **🔄 Reiniciar o container**  
 ```bash
-docker-compose down && docker-compose up -d
+### 🖼 Criação de Imagem com Docker
+
+### 👨‍💻 Parte 1: Criando e Listando Contêineres
+
+# Baixar a imagem Debian
+bash
+docker pull debian
+
+
+# Verificar contêineres em execução
+bash
+docker ps
+
+
+# Verificar todos os contêineres (em execução e parados)
+bash
+docker ps -a
+
 ```
 
 ---
