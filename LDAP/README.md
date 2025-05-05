@@ -3,75 +3,76 @@
 ### 👨‍💻 Parte 1: Servidor
 
 # Criar contêiner Debian para o servidor LDAP
-bash
+```bash
 docker run -it --name debian-rede-ldap debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update -y
-
+```
 
 # Instalar o nano (editor de texto)
-bash
+```bash
 apt install nano
-
+```
 
 # Criar o arquivo de usuários usuarios.ldif
-bash
+```bash
 nano usuarios.ldif
-
+```
 
 # Instalar ferramentas LDAP
-bash
+```bash
 apt install ldap-utils -y
-
+```
 
 # Instalar pacote procps (para comandos como ps)
-bash
+```bash
 apt install procps -y
-
+```
 
 # Verificar o status do serviço slapd (LDAP daemon)
-bash
+```bash
 ps aux | grep slapd
-
+```
 
 # Realizar uma busca LDAP
-bash
+```bash
 ldapsearch -x -H ldap://172.17.0.2 -b dc=empresa,dc=local
-
+```
 
 # Iniciar o serviço slapd (LDAP)
-bash
+```bash
 /etc/init.d/slapd start
-
+```
 
 # Verificar o caminho do comando slapd
-bash
+```bash
 which slapd
-
+```
 
 # Instalar o servidor LDAP slapd
-bash
+```bash
 apt update && apt install slapd -y
-
+```
 
 # Adicionar entradas no LDAP a partir do arquivo usuarios.ldif
-bash
+```bash
 ldapadd -x -D "cn=admin,dc=empresa,dc=local" -W -f usuarios.ldif
-
+```
 
 # Reconfigurar o servidor LDAP
-bash
+```bash
 dpkg-reconfigure slapd
-
+```
 
 # Realizar a busca LDAP novamente
-bash
+```bash
 ldapsearch -x -H ldap://172.17.0.2 -b dc=empresa,dc=local
-
+```
 
 # Sair do contêiner
-bash
+```bash
 exit
+```

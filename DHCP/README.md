@@ -3,76 +3,77 @@
 ### 👨‍💻 Parte 1: Servidor
 
 # Criar contêiner Debian para o servidor DHCP
-bash
+```bash
 docker run -it --name debian-rede-dhcp debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update -y
-
+```
 
 # Instalar nano e DHCP Server
-bash
+```bash
 apt install nano -y
-
-bash
+```
+```bash
 apt install isc-dhcp-server -y
-
+```
 
 # Editar configuração principal do DHCP
-bash
+```bash
 nano /etc/dhcp/dhcpd.conf
-
+```
 
 # Editar qual interface o servidor irá usar
-bash
+```bash
 nano /etc/default/isc-dhcp-server
-
+```
 # (ex: INTERFACESv4="eth0")
 
 # Testar configuração
-bash
+```bash
 dhcpd -t
-
+```
 
 # Iniciar o serviço DHCP
-bash
+```bash
 service isc-dhcp-server start
+```
 
-
-# Verificar leases (concessões de IP
-bash
+# Verificar leases (concessões de IP)
+```bash
 nano /var/lib/dhcp/dhcpd.leases
-
+```
 
 # Sair do contêiner
-bash
+```bash
 exit
-
+```
 
 ### 💻 Parte 2: Cliente
 
 # Criar contêiner Debian para o cliente DHCP
-bash
+```bash
 docker run -it --name debian-rede-dhcp-cliente debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update -y
-
+```
 
 # Instalar cliente DHCP
-bash
+```bash
 apt install isc-dhcp-client -y
-
+```
 
 # Liberar IP antigo (substitua "eth0" se necessário)
-bash
+```bash
 dhclient -r eth0
-
+```
 
 # Solicitar novo IP via DHCP
-bash
+```bash
 dhclient eth0
+```

@@ -3,110 +3,111 @@
 ### 👨‍💻 Parte 1: Servidor
 
 # Criar contêiner Debian para o servidor Samba
-bash
+```bash
 docker run -it --name debian-rede-samba debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update
-
+```
 
 # Instalar nano e Samba
-bash
+```bash
 apt install nano -y
-
-bash
+```
+```bash
 apt install samba -y
-
+```
 
 # Criar diretório compartilhado
-bash
+```bash
 mkdir -p /srv/samba/compartilhado
-
+```
 
 # Conceder permissões totais ao diretório compartilhado
-bash
+```bash
 chmod 777 /srv/samba/compartilhado
-
+```
 
 # Adicionar usuário para o Samba
-bash
+```bash
 adduser usuario1
-
+```
 
 # Editar configuração do Samba
-bash
+```bash
 nano /etc/samba/smb.conf
-
+```
 
 # Reiniciar serviço Samba
-bash
+```bash
 service smbd restart
-
+```
 
 # Verificar status do serviço Samba
-bash
+```bash
 service smbd status
-
+```
 
 # Instalar iproute2
-bash
+```bash
 apt install iproute2 -y
-
+```
 
 # Exibir interfaces de rede
-bash
+```bash
 ip a
-
+```
 
 # Verificar processos do Samba
-bash
+```bash
 ps aux | grep smbd
-
+```
 
 # Iniciar o serviço Samba
-bash
+```bash
 service smbd start
-
+```
 
 # Instalar netstat
-bash
+```bash
 apt install netstat -y
-
+```
 
 # Verificar portas e serviços do Samba
-bash
+```bash
 netstat -tulnp | grep smbd
-
+```
 
 # Sair do contêiner
-bash
+```bash
 exit
-
+```
 
 ### 💻 Parte 2: Cliente
 
 # Criar contêiner Debian para o cliente Samba
-bash
+```bash
 docker run -it --name debian-rede-samba-cliente debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update
-
+```
 
 # Instalar cliente SMB
-bash
+```bash
 apt install smbclient -y
-
+```
 
 # Listar compartilhamentos no servidor Samba
-bash
+```bash
 smbclient -L //172.17.0.2/ -U usuario1
-
+```
 
 # Sair do contêiner
-bash
+```bash
 exit
+```
