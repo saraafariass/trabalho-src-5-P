@@ -1,0 +1,92 @@
+version: '3.7'
+
+services:
+  # Serviço de DNS (Bind9)
+  dns:
+    image: debian_custom:latest
+    container_name: dns-server
+    command: ["named", "-g"]
+    ports:
+      - "53:53/udp"
+      - "53:53/tcp"
+    volumes:
+      - ./bind9/config:/etc/bind
+    networks:
+      - network1
+
+  # Serviço DHCP
+  dhcp:
+    image: debian_custom:latest
+    container_name: dhcp-server
+    command: ["dhcpd", "-f"]
+    ports:
+      - "67:67/udp"
+    volumes:
+      - ./dhcpd/config:/etc/dhcp
+    networks:
+      - network1
+
+  # Serviço Samba
+  samba:
+    image: debian_custom:latest
+    container_name: samba-server
+    ports:
+      - "139:139"
+      - "445:445"
+    volumes:
+      - ./samba/config:/etc/samba
+    networks:
+      - network1
+
+  # Serviço FTP (vsftpd)
+  ftp:
+    image: debian_custom:latest
+    container_name: ftp-server
+    environment:
+      - FTP_USER=usuario
+      - FTP_PASS=senha
+    ports:
+      - "21:21"
+      - "20:20"
+    volumes:
+      - ./ftp/data:/home/vsftpd
+    networks:
+      - network1
+
+  # Serviço LDAP
+  ldap:
+    image: debian_custom:latest
+    container_name: ldap-server
+    environment:
+      - LDAP_ORGANISATION="Empresa"
+      - LDAP_DOMAIN="empresa.com"
+      - LDAP_ADMIN_PASSWORD="admin123"
+    ports:
+      - "389:389"
+      - "636:636"
+    networks:
+      - network1
+
+  # Serviço Web (Apache)
+  web:
+    image: debian_custom:latest
+    container_name: apache-server
+    volumes:
+      - ./web/content:/usr/local/apache2/htdocs/
+    ports:
+      - "80:80"
+    networks:
+      - network1
+
+  # Serviço Firewall (UFW)
+  firewall:
+    image: debian_custom:latest
+    container_name: firewall-server
+    command: ["ufw", "enable"]
+    privileged: true
+    networks:
+      - network1
+
+networks:
+  network1:
+    driver: bridge
