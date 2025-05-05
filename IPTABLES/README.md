@@ -3,78 +3,79 @@
 ### 👨‍💻 Parte 1: Servidor
 
 # Criar contêiner Debian para o servidor IPTables
-bash
+```bash
 docker run --privileged --name debian-rede-iptables1 -it debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update -y
-
+```
 
 # Instalar o nano (editor de texto)
-bash
+```bash
 apt install nano
-
+```
 
 # Instalar o iptables
-bash
+```bash
 apt install -y iptables
-
+```
 
 # Definir políticas padrão
-bash
+```bash
 iptables -P INPUT DROP
-
-bash
+```
+```bash
 iptables -P OUTPUT ACCEPT
-
+```
 
 # Adicionar regras para aceitar conexões estabelecidas e relacionadas
-bash
+```bash
 iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT
-
+```
 
 # Aceitar conexões na interface de loopback (localhost)
-bash
+```bash
 iptables -A INPUT -i lo -j ACCEPT
-
+```
 
 # Aceitar conexões na porta 22 (SSH)
-bash
+```bash
 iptables -A INPUT -p tcp --dport 22 -j ACCEPT
-
+```
 
 # Aceitar conexões na porta 80 (HTTP)
-bash
+```bash
 iptables -A INPUT -p tcp --dport 80 -j ACCEPT
-
+```
 
 # Aceitar conexões na porta 443 (HTTPS)
-bash
+```bash
 iptables -A INPUT -p tcp --dport 443 -j ACCEPT
-
+```
 
 # Aceitar conexões na porta 389 (LDAP)
-bash
+```bash
 iptables -A INPUT -p tcp --dport 389 -j ACCEPT
-
+```
 
 # Instalar iptables-persistent para salvar as regras
-bash
+```bash
 apt update && apt install -y iptables-persistent
-
+```
 
 # Editar regras do iptables
-bash
+```bash
 nano /etc/iptables/rules.v4
-
+```
 
 # Verificar status do serviço iptables
-bash
+```bash
 service iptables status
-
+```
 
 # Sair do contêiner
-bash
+```bash
 exit
+```

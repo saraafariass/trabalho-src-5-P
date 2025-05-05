@@ -3,60 +3,61 @@
 ### 👨‍💻 Parte 1: Servidor
 
 # Criar contêiner Debian para o servidor Apache
-bash
+```bash
 docker run -it --name debian-rede-apache debian bash
-
+```
 
 # Atualizar pacotes
-bash
+```bash
 apt update -y
-
+```
 
 # Instalar o nano (editor de texto)
-bash
+```bash
 apt install nano
-
+```
 
 # Instalar o Apache2
-bash
+```bash
 apt install -y apache2
-
+```
 
 # Iniciar o serviço Apache2
-bash
+```bash
 service apache2 start
-
+```
 
 # Verificar o status do serviço Apache2
-bash
+```bash
 service apache2 status
-
+```
 
 # Remover o arquivo index.html padrão
-bash
+```bash
 rm /var/www/html/index.html
-
+```
 
 # Editar o arquivo index.html
-bash
+```bash
 nano /var/www/html/index.html
-
+```
 
 # Instalar net-tools (para ferramentas de rede)
-bash
+```bash
 apt install net-tools -y
-
+```
 
 # Instalar iproute2 (para manipulação de rede)
-bash
+```bash
 apt install iproute2 -y
-
+```
 
 # Verificar a configuração de rede
-bash
+```bash
 ip a
-
+```
 
 # Sair do contêiner
-bash
+```bash
 exit
+```
