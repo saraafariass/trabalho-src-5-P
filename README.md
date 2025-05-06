@@ -7,7 +7,7 @@
 
 # **📦 Configuração de serviços de rede Dockerizados**  
 
-**🚀 Um ambiente Docker completo com DNS (Bind9), DHCP (isc-dhcp-server), Samba, FTP (vsftpd), LDAP, Firewall (iptables) e NGINX, pronto para ser replicado em qualquer máquina.**  
+**🚀 Um ambiente Docker completo com DNS (Bind9), DHCP (isc-dhcp-server), Samba, FTP (vsftpd), LDAP, Firewall (iptables) e Apache2, pronto para ser replicado em qualquer máquina.**  
 
 ---
 
