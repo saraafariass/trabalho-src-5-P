@@ -3,7 +3,7 @@ version: '3.7'
 services:
   # Serviço de DNS (Bind9)
   dns:
-    image: debian_custom:latest
+    image: andyshinn/dnsmasq:2.83
     container_name: dns-server
     command: ["named", "-g"]
     ports:
@@ -16,7 +16,7 @@ services:
 
   # Serviço DHCP
   dhcp:
-    image: debian_custom:latest
+    image: ubuntu:22.04
     container_name: dhcp-server
     command: ["dhcpd", "-f"]
     ports:
@@ -28,7 +28,7 @@ services:
 
   # Serviço Samba
   samba:
-    image: debian_custom:latest
+    image: dperson/samba:latest
     container_name: samba-server
     ports:
       - "139:139"
@@ -40,7 +40,7 @@ services:
 
   # Serviço FTP (vsftpd)
   ftp:
-    image: debian_custom:latest
+    image: fauria/vsftpd:latest
     container_name: ftp-server
     environment:
       - FTP_USER=usuario
@@ -55,7 +55,7 @@ services:
 
   # Serviço LDAP
   ldap:
-    image: debian_custom:latest
+    image: osixia/openldap:latest
     container_name: ldap-server
     environment:
       - LDAP_ORGANISATION="Empresa"
@@ -69,7 +69,7 @@ services:
 
   # Serviço Web (Apache)
   web:
-    image: debian_custom:latest
+    image: ubuntu/apache2:2.4-20.04_beta
     container_name: apache-server
     volumes:
       - ./web/content:/usr/local/apache2/htdocs/
@@ -80,7 +80,7 @@ services:
 
   # Serviço Firewall (UFW)
   firewall:
-    image: debian_custom:latest
+    image: alpine:3.21.3
     container_name: firewall-server
     command: ["ufw", "enable"]
     privileged: true
