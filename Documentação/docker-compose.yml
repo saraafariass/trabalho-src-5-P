@@ -1,0 +1,94 @@
+version: '3.7'  # Versão do Docker Compose
+
+services:  # Início da definição dos serviços (contêineres)
+
+  # Serviço de DNS (Bind9)
+  dns:
+    image: andyshinn/dnsmasq:2.83  # Imagem usada para rodar o servidor DNS
+    container_name: dns-server     # Nome fixo do contêiner
+    command: ["named", "-g"]       # Comando para iniciar o serviço em primeiro plano
+    ports:
+      - "53:53/udp"                # Mapeamento da porta DNS (UDP)
+      - "53:53/tcp"                # Mapeamento da porta DNS (TCP)
+    volumes:
+      - ./bind9/config:/etc/bind  # Monta configurações DNS da máquina local para o contêiner
+    networks:
+      - network1                   # Conecta o contêiner à rede network1
+
+  # Serviço DHCP
+  dhcp:
+    image: ubuntu:22.04           # Imagem base Ubuntu
+    container_name: dhcp-server   # Nome do contêiner
+    command: ["dhcpd", "-f"]      # Comando para rodar o servidor DHCP em primeiro plano
+    ports:
+      - "67:67/udp"               # Porta padrão do DHCP
+    volumes:
+      - ./dhcpd/config:/etc/dhcp  # Monta configurações do DHCP da máquina local
+    networks:
+      - network1                  # Conecta à rede network1
+
+  # Serviço Samba (compartilhamento de arquivos)
+  samba:
+    image: dperson/samba:latest   # Imagem do servidor Samba
+    container_name: samba-server  # Nome do contêiner
+    ports:
+      - "139:139"                 # Porta NetBIOS
+      - "445:445"                 # Porta SMB direta
+    volumes:
+      - ./samba/config:/etc/samba  # Monta configurações do Samba
+    networks:
+      - network1                  # Conecta à rede network1
+
+  # Serviço FTP (vsftpd)
+  ftp:
+    image: fauria/vsftpd:latest   # Imagem do servidor FTP
+    container_name: ftp-server    # Nome do contêiner
+    environment:
+      - FTP_USER=usuario          # Usuário FTP
+      - FTP_PASS=senha            # Senha FTP
+    ports:
+      - "21:21"                   # Porta de controle do FTP
+      - "20:20"                   # Porta de dados do FTP
+    volumes:
+      - ./ftp/data:/home/vsftpd  # Diretório com arquivos FTP montado no contêiner
+    networks:
+      - network1                  # Conecta à rede network1
+
+  # Serviço LDAP (autenticação centralizada)
+  ldap:
+    image: osixia/openldap:latest     # Imagem do servidor LDAP
+    container_name: ldap-server       # Nome do contêiner
+    environment:
+      - LDAP_ORGANISATION="Empresa"   # Nome da organização LDAP
+      - LDAP_DOMAIN="empresa.com"     # Domínio da empresa
+      - LDAP_ADMIN_PASSWORD="admin123"  # Senha do admin LDAP
+    ports:
+      - "389:389"                     # Porta LDAP (sem criptografia)
+      - "636:636"                     # Porta LDAP com TLS/SSL
+    networks:
+      - network1                      # Conecta à rede network1
+
+  # Serviço Web (Apache)
+  web:
+    image: ubuntu/apache2:2.4-20.04_beta  # Imagem com Apache pré-instalado
+    container_name: apache-server         # Nome do contêiner
+    volumes:
+      - ./web/content:/usr/local/apache2/htdocs/  # Monta conteúdo HTML para o Apache
+    ports:
+      - "80:80"                            # Porta padrão HTTP
+    networks:
+      - network1                           # Conecta à rede network1
+
+  # Serviço Firewall (UFW)
+  firewall:
+    image: alpine:3.21.3          # Imagem leve Alpine Linux
+    container_name: firewall-server  # Nome do contêiner
+    command: ["ufw", "enable"]    # Habilita o firewall ao iniciar
+    privileged: true              # Permite permissões elevadas (necessário para UFW funcionar)
+    networks:
+      - network1                  # Conecta à rede network1
+
+# Definição da rede virtual usada pelos serviços
+networks:
+  network1:
+    driver: bridge  # Usa o driver bridge para criar uma rede interna Docker
