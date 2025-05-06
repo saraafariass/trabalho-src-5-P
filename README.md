@@ -32,6 +32,10 @@ Tudo isso é **empacotado em uma imagem Docker personalizada**, facilitando a ex
 
 ---
 
+## **🌐 Topologia de rede**
+
+
+
 ## **🛠️ Como Usar**  
 
 ### **1️⃣ Clone o repositório (ou copie os arquivos necessários)**  
@@ -81,25 +85,23 @@ Antes de construir a imagem, você pode editar:
 
 ## **Iniciando**  
 
-```bash
 ### 🖼 Criação de Imagem com Docker
 
 ### 👨‍💻 Parte 1: Criando e Listando Contêineres
 
 # Baixar a imagem Debian
-bash
+```bash
 docker pull debian
-
+```
 
 # Verificar contêineres em execução
-bash
+```bash
 docker ps
-
+```
 
 # Verificar todos os contêineres (em execução e parados)
-bash
+```bash
 docker ps -a
-
 ```
 
 ---
