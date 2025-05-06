@@ -34,7 +34,51 @@ Tudo isso é **empacotado em uma imagem Docker personalizada**, facilitando a ex
 
 ## **🌐 Topologia de rede**
 
+```bash
+               +--------------------+
+               |     CLIENTES       |
+               +---------+----------+
+                         |
+                    +----v-----+
+                    | FIREWALL |
+                    +----+-----+
+                         |
+    +--------+-----------+----------+----------+----------+--------+
+    |        |           |          |          |          |        |
++---v--+  +--v--+     +--v--+    +--v--+     +--v--+    +--v--+  +--v--+
+| DNS |  | DHCP|     |LDAP |    | FTP |     |SAMBA|    | WEB |  | ... |
++-----+  +-----+     +-----+    +-----+     +-----+    +-----+  +-----+
+```
 
+**🔄 Fluxo de Comunicação entre os Serviços**
+
+**Inicialização da Rede**
+Todos os containers são conectados à rede bridge definida no Docker (network1), permitindo que se comuniquem entre si usando nomes de host.
+
+- Distribuição de IP (DHCP)
+   - Quando um cliente entra na rede, o serviço DHCP atribui um IP automaticamente.
+   - 🔁 Comunicação: Cliente → DHCP → IP Alocado
+
+- Resolução de Nomes (DNS)
+    - Após receber um IP, o cliente consulta o servidor DNS para resolver nomes de serviços (como ldap.empresa.com ou ftp.empresa.com).
+    - 🔁 Comunicação: Cliente → DNS → IP do Serviço
+
+- Acesso Controlado (Firewall)
+    - O tráfego entre clientes e serviços passa pelo Firewall (UFW), que define regras de permissão e bloqueio de portas e protocolos.
+    - 🔁 Comunicação: Cliente → Firewall → Serviço Autorizado
+
+- Autenticação Centralizada (LDAP)
+    - Serviços como Samba, FTP e Web podem autenticar usuários via LDAP, centralizando o controle de acesso.
+    - 🔁 Comunicação: Samba/FTP/Web → LDAP → Verificação de Credenciais
+
+- Acesso aos Serviços
+    - Após validação, os usuários podem:
+       - acessar páginas web via Apache (HTTP)
+       - transferir arquivos via FTP ou Samba
+       - consultar ou registrar usuários via LDAP
+    - 🔁 Comunicação: Cliente → Serviço Específico
+
+---
 
 ## **🛠️ Como Usar**  
 
