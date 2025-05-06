@@ -1,4 +1,3 @@
-@ -1,63 +0,0 @@
 ### 🌐 Apache2 com Docker e Debian
 
 ### 👨‍💻 Parte 1: Servidor
@@ -62,3 +61,19 @@ ip a
 ```bash
 exit
 ```
+
+# Documento HTML
+
+```bash
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Meu Servidor Apache</title>
+</head>
+<body>
+    <h1>Servidor Apache Configurado com Sucesso!</h1>
+</body>
+</html>
+```
+
+

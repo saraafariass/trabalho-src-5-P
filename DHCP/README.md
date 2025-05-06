@@ -77,3 +77,58 @@ dhclient -r eth0
 ```bash
 dhclient eth0
 ```
+
+# Documento /etc/dhcpd.conf
+
+```bash
+# Configura    o global
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+
+# Sub-rede para clientes (192.168.2.0/24)
+subnet 192.168.2.0 netmask 255.255.255.0 {
+  range 192.168.2.100 192.168.2.200;
+  option routers 192.168.2.1;
+  option subnet-mask 255.255.255.0;
+  option domain-name-servers 192.168.1.10;
+  option domain-name "empresa.local";
+}
+
+# Reservas fixas para servidores na rede 192.168.1.0/24
+host dns-server {
+  hardware ethernet 02:42:c0:a8:01:0a;
+  fixed-address 192.168.1.10;
+}
+```
+
+# Documento /etc/default/isc-dhcp-server
+
+```bash
+INTERFACESv4="eth0"
+INTERFACESv6=""
+```
+
+# Documento /etc/dhcp/dhcpd.conf
+
+```bash
+# Configura    o global
+default-lease-time 600;
+max-lease-time 7200;
+authoritative;
+
+# Sub-rede para clientes (192.168.2.0/24)
+subnet 192.168.2.0 netmask 255.255.255.0 {
+  range 192.168.2.100 192.168.2.200;
+  option routers 192.168.2.1;
+  option subnet-mask 255.255.255.0;
+  option domain-name-servers 192.168.1.10;
+  option domain-name "empresa.local";
+}
+
+# Reservas fixas para servidores na rede 192.168.1.0/24
+host dns-server {
+  hardware ethernet 02:42:c0:a8:01:0a;
+  fixed-address 192.168.1.10;
+}
+```

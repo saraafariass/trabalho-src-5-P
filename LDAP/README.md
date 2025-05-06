@@ -76,3 +76,21 @@ ldapsearch -x -H ldap://172.17.0.2 -b dc=empresa,dc=local
 ```bash
 exit
 ```
+
+# Documento LDAP
+
+# usuarios.ldif
+
+```bash                             
+dn: ou=usuarios,dc=example,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+
+dn: uid=roitier,ou=usuarios,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: roitier
+sn: goncalves
+cn: Roitier Goncalves
+userPassword: 123456789
+
+```
