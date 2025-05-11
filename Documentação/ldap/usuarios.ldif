@@ -1,0 +1,10 @@
+dn: ou=usuarios,dc=example,dc=com
+objectClass: organizationalUnit
+ou: usuarios
+
+dn: uid=roitier,ou=usuarios,dc=example,dc=com
+objectClass: inetOrgPerson
+uid: roitier
+sn: goncalves
+cn: Roitier Goncalves
+userPassword: 123456789

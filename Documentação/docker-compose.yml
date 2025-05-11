@@ -1,44 +1,31 @@
-version: '3.7'
+version: '3'
 
 services:
-  # Serviço de DNS (Bind9)
   dns:
     image: andyshinn/dnsmasq:2.83
     container_name: dns-server
-    command: ["named", "-g"]
     ports:
       - "53:53/udp"
       - "53:53/tcp"
     volumes:
-      - ./bind9/config:/etc/bind
+      - ./dns/config:/etc/dnsmasq.d
     networks:
       - network1
 
-  # Serviço DHCP
-  dhcp:
-    image: ubuntu:22.04
-    container_name: dhcp-server
-    command: ["dhcpd", "-f"]
-    ports:
-      - "67:67/udp"
-    volumes:
-      - ./dhcpd/config:/etc/dhcp
-    networks:
-      - network1
-
-  # Serviço Samba
   samba:
     image: dperson/samba:latest
     container_name: samba-server
     ports:
       - "139:139"
-      - "445:445"
+      - "5445:445"
     volumes:
-      - ./samba/config:/etc/samba
+      - ./samba/config:/etc/samba/
+      - ./samba/data:/data
+    environment:
+      - TZ=America/Sao_Paulo
     networks:
       - network1
 
-  # Serviço FTP (vsftpd)
   ftp:
     image: fauria/vsftpd:latest
     container_name: ftp-server
@@ -53,7 +40,6 @@ services:
     networks:
       - network1
 
-  # Serviço LDAP
   ldap:
     image: osixia/openldap:latest
     container_name: ldap-server
@@ -64,28 +50,38 @@ services:
     ports:
       - "389:389"
       - "636:636"
+    volumes:
+      - ./ldap/data:/var/lib/ldap
+      - ./ldap/config:/etc/ldap/slapd.d
     networks:
       - network1
 
-  # Serviço Web (Apache)
   web:
     image: ubuntu/apache2:2.4-20.04_beta
     container_name: apache-server
     volumes:
-      - ./web/content:/usr/local/apache2/htdocs/
+      - ./web/content:/var/www/html/
     ports:
       - "80:80"
+      - "443:443"
     networks:
       - network1
 
-  # Serviço Firewall (UFW)
-  firewall:
-    image: alpine:3.21.3
-    container_name: firewall-server
-    command: ["ufw", "enable"]
+  iptables:
+    image: ubuntu:latest
+    container_name: iptables-server
+    command: bash -c "apt-get update && apt-get install -y iptables && iptables -F && iptables -P INPUT DROP && iptables -P FORWARD DROP && iptables -P OUTPUT ACCEPT && iptables -A INPUT -m conntrack --ctstate ESTABLISHED,RELATED -j ACCEPT && tail -f /dev/null"
     privileged: true
     networks:
       - network1
+
+  dhcp:
+    image: portnox/portnox-dhcp:latest
+    container_name: dhcp-server
+    command: bash -c "dhcpd -f -d -cf /etc/dhcp/dhcpd.conf && tail -f /dev/null"
+    volumes:
+      - ./dhcp/config:/etc/dhcp
+    network_mode: "host"
 
 networks:
   network1:
