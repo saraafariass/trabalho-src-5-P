@@ -7,7 +7,7 @@
 
 # **📦 Configuração de serviços de rede Dockerizados**  
 
-**🚀 Um ambiente Docker completo com DNS (Bind9), DHCP (isc-dhcp-server), Samba, FTP (vsftpd), LDAP, Firewall (iptables) e NGINX, pronto para ser replicado em qualquer máquina.**  
+**🚀 Um ambiente Docker completo com DNS (Bind9), DHCP (isc-dhcp-server), Samba, FTP (vsftpd), LDAP, Firewall (iptables) e Apache2, pronto para ser replicado em qualquer máquina.**  
 
 ---
 
@@ -29,6 +29,54 @@ Tudo isso é **empacotado em uma imagem Docker personalizada**, facilitando a ex
 - **Docker** instalado ([Guia de instalação](https://docs.docker.com/engine/install/))  
 - **Docker Compose** (geralmente incluso na instalação do Docker)  
 - **Linux** (recomendado) ou WSL2 no Windows  
+
+---
+
+## **🌐 Topologia de rede**
+
+```bash
+               +--------------------+
+               |     CLIENTES       |
+               +---------+----------+
+                         |
+                    +----v-----+
+                    | FIREWALL |
+                    +----+-----+
+                         |
+    +--------+-----------+----------+----------+----------+--------+
+    |        |           |          |          |          |        |
++---v--+  +--v--+     +--v--+    +--v--+     +--v--+    +--v--+  +--v--+
+| DNS |  | DHCP|     |LDAP |    | FTP |     |SAMBA|    | WEB |  | ... |
++-----+  +-----+     +-----+    +-----+     +-----+    +-----+  +-----+
+```
+
+**🔄 Fluxo de Comunicação entre os Serviços**
+
+**Inicialização da Rede**
+Todos os containers são conectados à rede bridge definida no Docker (network1), permitindo que se comuniquem entre si usando nomes de host.
+
+- Distribuição de IP (DHCP)
+   - Quando um cliente entra na rede, o serviço DHCP atribui um IP automaticamente.
+   - 🔁 Comunicação: Cliente → DHCP → IP Alocado
+
+- Resolução de Nomes (DNS)
+    - Após receber um IP, o cliente consulta o servidor DNS para resolver nomes de serviços (como ldap.empresa.com ou ftp.empresa.com).
+    - 🔁 Comunicação: Cliente → DNS → IP do Serviço
+
+- Acesso Controlado (Firewall)
+    - O tráfego entre clientes e serviços passa pelo Firewall (UFW), que define regras de permissão e bloqueio de portas e protocolos.
+    - 🔁 Comunicação: Cliente → Firewall → Serviço Autorizado
+
+- Autenticação Centralizada (LDAP)
+    - Serviços como Samba, FTP e Web podem autenticar usuários via LDAP, centralizando o controle de acesso.
+    - 🔁 Comunicação: Samba/FTP/Web → LDAP → Verificação de Credenciais
+
+- Acesso aos Serviços
+    - Após validação, os usuários podem:
+       - acessar páginas web via Apache (HTTP)
+       - transferir arquivos via FTP ou Samba
+       - consultar ou registrar usuários via LDAP
+    - 🔁 Comunicação: Cliente → Serviço Específico
 
 ---
 
@@ -81,25 +129,23 @@ Antes de construir a imagem, você pode editar:
 
 ## **Iniciando**  
 
-```bash
 ### 🖼 Criação de Imagem com Docker
 
 ### 👨‍💻 Parte 1: Criando e Listando Contêineres
 
 # Baixar a imagem Debian
-bash
+```bash
 docker pull debian
-
+```
 
 # Verificar contêineres em execução
-bash
+```bash
 docker ps
-
+```
 
 # Verificar todos os contêineres (em execução e parados)
-bash
+```bash
 docker ps -a
-
 ```
 
 ---

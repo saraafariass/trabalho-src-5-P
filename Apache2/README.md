@@ -6,6 +6,10 @@
 ```bash
 docker run -it --name debian-rede-apache debian bash
 ```
+# Baixar a imagem 
+```bash
+docker pull andyshinn/dnsmasq
+```
 
 # Atualizar pacotes
 ```bash
